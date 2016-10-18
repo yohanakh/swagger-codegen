@@ -1,6 +1,7 @@
 package io.swagger.api;
 
 import io.swagger.TestUtils;
+import io.swagger.configuration.ClientConfiguration;
 import io.swagger.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,7 +88,7 @@ public class UserApiTest {
         return user;
     }
 
-    @SpringBootApplication
+    @SpringBootApplication(scanBasePackages = "io.swagger", exclude = ClientConfiguration.class)
     @EnableFeignClients
     protected static class Application {
         public static void main(String[] args) {

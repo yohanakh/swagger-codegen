@@ -5,8 +5,10 @@ import io.swagger.TestUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import io.swagger.configuration.ClientConfiguration;
 import io.swagger.model.Category;
 import io.swagger.model.Pet;
 import io.swagger.model.Tag;
@@ -65,7 +67,7 @@ public class PetApiTest {
 
         client.updatePet(pet);
 
-        List<Pet> pets = client.findPetsByStatus(Arrays.asList(new String[]{"available"})).getBody();
+        List<Pet> pets = client.findPetsByStatus(Collections.singletonList("available")).getBody();
         assertNotNull(pets);
 
         boolean found = false;
@@ -94,7 +96,7 @@ public class PetApiTest {
 
         client.updatePet(pet);
 
-        List<Pet> pets = client.findPetsByTags(Arrays.asList(new String[]{"friendly"})).getBody();
+        List<Pet> pets = client.findPetsByTags(Collections.singletonList("friendly")).getBody();
         assertNotNull(pets);
 
         boolean found = false;
@@ -158,7 +160,7 @@ public class PetApiTest {
         assertTrue(pet1.hashCode() == pet1.hashCode());
 
         pet2.setName("really-happy");
-        pet2.setPhotoUrls(Arrays.asList(new String[]{"http://foo.bar.com/1", "http://foo.bar.com/2"}));
+        pet2.setPhotoUrls(Arrays.asList("http://foo.bar.com/1", "http://foo.bar.com/2"));
         assertFalse(pet1.equals(pet2));
         assertFalse(pet2.equals(pet1));
         assertFalse(pet1.hashCode() == (pet2.hashCode()));
@@ -166,7 +168,7 @@ public class PetApiTest {
         assertTrue(pet2.hashCode() == pet2.hashCode());
 
         pet1.setName("really-happy");
-        pet1.setPhotoUrls(Arrays.asList(new String[]{"http://foo.bar.com/1", "http://foo.bar.com/2"}));
+        pet1.setPhotoUrls(Arrays.asList("http://foo.bar.com/1", "http://foo.bar.com/2"));
         assertTrue(pet1.equals(pet2));
         assertTrue(pet2.equals(pet1));
         assertTrue(pet1.hashCode() == pet2.hashCode());
@@ -184,14 +186,14 @@ public class PetApiTest {
 
         pet.setCategory(category);
         pet.setStatus(Pet.StatusEnum.AVAILABLE);
-        List<String> photos = Arrays.asList(new String[]{"http://foo.bar.com/1", "http://foo.bar.com/2"});
+        List<String> photos = Arrays.asList("http://foo.bar.com/1", "http://foo.bar.com/2");
         pet.setPhotoUrls(photos);
 
         return pet;
     }
 
 
-    @SpringBootApplication
+    @SpringBootApplication(scanBasePackages = "io.swagger", exclude = ClientConfiguration.class)
     @EnableFeignClients
     protected static class Application {
         public static void main(String[] args) {

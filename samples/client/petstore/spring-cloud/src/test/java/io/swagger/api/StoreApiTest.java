@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import feign.FeignException;
 import io.swagger.TestUtils;
+import io.swagger.configuration.ClientConfiguration;
 import io.swagger.model.Order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = StoreApiTest.Application.class)
 public class StoreApiTest {
+
 
     @Autowired
     private StoreApiClient client;
@@ -61,25 +63,16 @@ public class StoreApiTest {
     }
 
     private Order createOrder() {
-        Order order = new Order();
-        order.setPetId(new Long(200));
-        order.setQuantity(new Integer(13));
-        order.setShipDate(org.joda.time.DateTime.now());
-        order.setStatus(Order.StatusEnum.PLACED);
-        order.setComplete(true);
-
-        try {
-            Field idField = Order.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(order, TestUtils.nextId());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return order;
+        return new Order()
+                .id(TestUtils.nextId())
+                .petId(200L)
+                .quantity(13)
+                .shipDate(org.threeten.bp.OffsetDateTime.now())
+                .status(Order.StatusEnum.PLACED)
+                .complete(true);
     }
 
-    @SpringBootApplication
+    @SpringBootApplication(scanBasePackages = "io.swagger", exclude = ClientConfiguration.class)
     @EnableFeignClients
     protected static class Application {
         public static void main(String[] args) {

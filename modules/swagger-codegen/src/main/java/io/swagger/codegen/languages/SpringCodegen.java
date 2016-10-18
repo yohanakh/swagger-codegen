@@ -81,6 +81,19 @@ public class SpringCodegen extends AbstractJavaCodegen {
 
     @Override
     public void processOpts() {
+
+        // Process java8 option before common java ones to change the default dateLibrary to java8.
+        if (additionalProperties.containsKey(JAVA_8)) {
+            this.setJava8(Boolean.valueOf(additionalProperties.get(JAVA_8).toString()));
+        }
+        if (this.java8) {
+            additionalProperties.put("javaVersion", "1.8");
+            additionalProperties.put("jdk8", "true");
+            if (!additionalProperties.containsKey(DATE_LIBRARY)) {
+                setDateLibrary("java8");
+            }
+        }
+
         super.processOpts();
 
         // clear model and api doc template as this codegen
@@ -107,10 +120,6 @@ public class SpringCodegen extends AbstractJavaCodegen {
 
         if (additionalProperties.containsKey(SINGLE_CONTENT_TYPES)) {
             this.setSingleContentTypes(Boolean.valueOf(additionalProperties.get(SINGLE_CONTENT_TYPES).toString()));
-        }
-
-        if (additionalProperties.containsKey(JAVA_8)) {
-            this.setJava8(Boolean.valueOf(additionalProperties.get(JAVA_8).toString()));
         }
 
         if (additionalProperties.containsKey(ASYNC)) {
@@ -170,13 +179,13 @@ public class SpringCodegen extends AbstractJavaCodegen {
             }
         }
 
-        if (this.java8) {
-            additionalProperties.put("javaVersion", "1.8");
-            additionalProperties.put("jdk8", "true");
-            typeMapping.put("date", "LocalDate");
-            typeMapping.put("DateTime", "OffsetDateTime");
-            importMapping.put("LocalDate", "java.time.LocalDate");
-            importMapping.put("OffsetDateTime", "java.time.OffsetDateTime");
+        if ("threetenbp".equals(dateLibrary)) {
+            supportingFiles.add(new SupportingFile("customInstantDeserializer.mustache",
+                    (sourceFolder + File.separator + configPackage).replace(".", java.io.File.separator), "CustomInstantDeserializer.java"));
+            if (library.equals(DEFAULT_LIBRARY) || library.equals(SPRING_CLOUD_LIBRARY)) {
+                supportingFiles.add(new SupportingFile("jacksonConfiguration.mustache",
+                        (sourceFolder + File.separator + configPackage).replace(".", java.io.File.separator), "JacksonConfiguration.java"));
+            }
         }
     }
 
@@ -191,7 +200,7 @@ public class SpringCodegen extends AbstractJavaCodegen {
             basePath = basePath.substring(0, pos);
         }
 
-        if (basePath == "") {
+        if (basePath.equals("")) {
             basePath = "default";
         } else {
             co.subresourceOperation = !co.path.isEmpty();
