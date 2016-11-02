@@ -9,8 +9,8 @@ import retrofit2.http.*;
 import okhttp3.RequestBody;
 
 import io.swagger.client.model.Client;
-import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.OffsetDateTime;
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
@@ -26,6 +26,9 @@ public interface FakeApi {
    * @return Call&lt;Client&gt;
    */
   
+  @Headers({
+  	"Content-Type:application/json" 
+  })
   @PATCH("fake")
   Observable<Client> testClientModel(
     @retrofit2.http.Body Client body

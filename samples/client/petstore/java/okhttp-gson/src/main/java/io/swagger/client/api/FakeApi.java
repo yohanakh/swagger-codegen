@@ -39,8 +39,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 import io.swagger.client.model.Client;
-import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.OffsetDateTime;
 import java.math.BigDecimal;
 
 import java.lang.reflect.Type;

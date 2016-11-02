@@ -106,6 +106,9 @@ dependencies {
     compile "com.netflix.feign:feign-core:$feign_version"
     compile "com.netflix.feign:feign-jackson:$feign_version"
     compile "com.netflix.feign:feign-slf4j:$feign_version"
+    compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
     compile "com.github.joschi.jackson:jackson-datatype-threetenbp:$jackson_version",
     compile "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:$oltu_version"
     compile "com.brsanthu:migbase64:2.2"

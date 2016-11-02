@@ -35,11 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-<<<<<<< HEAD
-import org.joda.time.DateTime;
-=======
 import org.threeten.bp.OffsetDateTime;
->>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
 
 /**
  * MixedPropertiesAndAdditionalPropertiesClass

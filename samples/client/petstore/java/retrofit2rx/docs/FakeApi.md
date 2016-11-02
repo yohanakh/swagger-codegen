@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/xml; charset=utf-8, application/json; charset=utf-8
+ - **Content-Type**: application/xml; charset=utf-8application/json; charset=utf-8, 
  - **Accept**: application/xml; charset=utf-8, application/json; charset=utf-8
 
 <a name="testEnumParameters"></a>

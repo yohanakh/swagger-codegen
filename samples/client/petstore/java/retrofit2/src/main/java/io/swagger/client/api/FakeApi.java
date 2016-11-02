@@ -9,14 +9,9 @@ import retrofit2.http.*;
 import okhttp3.RequestBody;
 
 import io.swagger.client.model.Client;
-<<<<<<< HEAD
-import org.joda.time.LocalDate;
-=======
-import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.LocalDate;
->>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
+import org.threeten.bp.OffsetDateTime;
 import java.math.BigDecimal;
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;

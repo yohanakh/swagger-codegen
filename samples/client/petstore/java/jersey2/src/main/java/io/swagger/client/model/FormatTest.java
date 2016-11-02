@@ -32,13 +32,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.UUID;
-<<<<<<< HEAD
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-=======
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
->>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
 
 /**
  * FormatTest

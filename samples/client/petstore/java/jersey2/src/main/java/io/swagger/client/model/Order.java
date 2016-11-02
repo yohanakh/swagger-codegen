@@ -30,11 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-<<<<<<< HEAD
-import org.joda.time.DateTime;
-=======
 import org.threeten.bp.OffsetDateTime;
->>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
 
 /**
  * Order
