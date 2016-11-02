@@ -3,6 +3,16 @@ package io.swagger.api;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import io.swagger.Application;
 import io.swagger.TestUtils;
+<<<<<<< HEAD
+=======
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import io.swagger.configuration.ClientConfiguration;
+>>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
 import io.swagger.model.Category;
 import io.swagger.model.Pet;
 import io.swagger.model.Tag;
@@ -62,7 +72,11 @@ public class PetApiTest {
 
         client.updatePet(pet).execute();
 
+<<<<<<< HEAD
         List<Pet> pets = client.findPetsByStatus(Collections.singletonList("available")).execute().getBody();
+=======
+        List<Pet> pets = client.findPetsByStatus(Collections.singletonList("available")).getBody();
+>>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
         assertNotNull(pets);
 
         boolean found = false;
@@ -91,7 +105,11 @@ public class PetApiTest {
 
         client.updatePet(pet).execute();
 
+<<<<<<< HEAD
         List<Pet> pets = client.findPetsByTags(Collections.singletonList("friendly")).execute().getBody();
+=======
+        List<Pet> pets = client.findPetsByTags(Collections.singletonList("friendly")).getBody();
+>>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
         assertNotNull(pets);
 
         boolean found = false;
@@ -187,4 +205,21 @@ public class PetApiTest {
         return pet;
     }
 
+<<<<<<< HEAD
+=======
+
+    @SpringBootApplication(scanBasePackages = "io.swagger", exclude = ClientConfiguration.class)
+    @EnableFeignClients
+    protected static class Application {
+        public static void main(String[] args) {
+            new SpringApplicationBuilder(Application.class).run(args);
+        }
+    }
+
+
+
+
+
+
+>>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
 }

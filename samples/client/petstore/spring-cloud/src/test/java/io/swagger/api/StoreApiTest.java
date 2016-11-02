@@ -3,12 +3,14 @@ package io.swagger.api;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import io.swagger.Application;
 import io.swagger.TestUtils;
+import io.swagger.configuration.ClientConfiguration;
 import io.swagger.model.Order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.threeten.bp.OffsetDateTime;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -18,6 +20,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 public class StoreApiTest {
+
 
     @Autowired
     private StoreApiClient client;
@@ -59,6 +62,7 @@ public class StoreApiTest {
     }
 
     private Order createOrder() {
+<<<<<<< HEAD
         Order order = new Order();
         order.setPetId(200L);
         order.setQuantity(13);
@@ -77,4 +81,23 @@ public class StoreApiTest {
         return order;
     }
 
+=======
+        return new Order()
+                .id(TestUtils.nextId())
+                .petId(200L)
+                .quantity(13)
+                //Ensure 3 fractional digits because of a bug in the petstore server
+                .shipDate(OffsetDateTime.now().withNano(123000000))
+                .status(Order.StatusEnum.PLACED)
+                .complete(true);
+    }
+
+    @SpringBootApplication(scanBasePackages = "io.swagger", exclude = ClientConfiguration.class)
+    @EnableFeignClients
+    protected static class Application {
+        public static void main(String[] args) {
+            new SpringApplicationBuilder(StoreApiTest.Application.class).run(args);
+        }
+    }
+>>>>>>> 6f02fade22b29a61d9a837fef01cb808fec05e42
 }
