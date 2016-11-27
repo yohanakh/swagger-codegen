@@ -295,7 +295,7 @@ public class SpringCodegen extends AbstractJavaCodegen {
                                 tags.add(value);
                             }
                             if (tags.size() > 0) {
-                                tags.get(tags.size() - 1).remove("hasMore");
+                                tags.get(tags.size() - 1).put("hasMore", null);
                             }
                             if (operation.getTags().size() > 0) {
                                 String tag = operation.getTags().get(0);

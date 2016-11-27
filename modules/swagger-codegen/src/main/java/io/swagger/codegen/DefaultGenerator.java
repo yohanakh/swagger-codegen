@@ -35,7 +35,7 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
         this.config = opts.getConfig();
 
         this.config.additionalProperties().putAll(opts.getOpts().getProperties());
-
+        this.config.additionalProperties().put(CodegenConstants.CONTEXT_PATH, swagger.getBasePath());
         ignoreProcessor = new CodegenIgnoreProcessor(this.config.getOutputDir());
 
         return this;
@@ -89,6 +89,9 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
         if(System.getProperty("apiDocs") != null) {
             generateApiDocumentation = Boolean.valueOf(System.getProperty("apiDocs"));
         }
+        boolean clearModelsDirectory = Boolean.getBoolean("clearModelsDirectory");
+        boolean clearApisDirectory = Boolean.getBoolean("clearApisDirectory");
+        boolean clearDirectories = Boolean.getBoolean("clearDirectories");
 
         if(generateApis == null && generateModels == null && generateSupportingFiles == null) {
             // no specifics are set, generate everything
@@ -220,6 +223,17 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
         // models
         final Map<String, Model> definitions = swagger.getDefinitions();
         if (definitions != null) {
+            if (clearModelsDirectory || clearDirectories) {
+                File dir = new File(config.modelFileFolder());
+                if (dir != null && dir.exists()) {
+                    for (File file : dir.listFiles()) {
+                        if (!file.delete()) {
+                            LOGGER.error("Failed to remove file " + file);
+                            throw new RuntimeException("Failed to remove file " + file);
+                        }
+                    }
+                }
+            }
         	Set<String> modelKeys = definitions.keySet();
 
             if(generateModels) {
@@ -376,6 +390,17 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
         // apis
         Map<String, List<CodegenOperation>> paths = processPaths(swagger.getPaths());
         if(generateApis) {
+            if (clearApisDirectory || clearDirectories) {
+                File dir = new File(config.apiFileFolder());
+                if (dir != null && dir.exists()) {
+                    for (File file : dir.listFiles()) {
+                        if (!file.delete()) {
+                            LOGGER.error("Failed to remove file " + file);
+                            throw new RuntimeException("Failed to remove file " + file);
+                        }
+                    }
+                }
+            }
             if(apisToGenerate != null && apisToGenerate.size() > 0) {
                 Map<String, List<CodegenOperation>> updatedPaths = new TreeMap<String, List<CodegenOperation>>();
                 for(String m : paths.keySet()) {
@@ -658,6 +683,7 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
             String templateFile = getFullTemplateFile(config, templateName);
             String template = readTemplate(templateFile);
             Mustache.Compiler compiler = Mustache.compiler();
+
             compiler = config.processCompiler(compiler);                                
             Template tmpl = compiler
                     .withLoader(new Mustache.TemplateLoader() {

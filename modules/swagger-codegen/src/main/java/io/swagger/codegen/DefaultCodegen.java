@@ -73,7 +73,7 @@ import java.util.regex.Pattern;
 
 public class DefaultCodegen {
     protected static final Logger LOGGER = LoggerFactory.getLogger(DefaultCodegen.class);
-    
+
     protected String inputSpec;
     protected String outputFolder = "";
     protected Set<String> defaultIncludes = new HashSet<String>();
@@ -113,6 +113,9 @@ public class DefaultCodegen {
     // Then translated back during JSON encoding and decoding
     protected Map<String, String> specialCharReplacements = new HashMap<String, String>();
 
+    protected Boolean appendContextPathToPackage = false;
+    protected String contextPath;
+
     public List<CliOption> cliOptions() {
         return cliOptions;
     }
@@ -146,6 +149,14 @@ public class DefaultCodegen {
 
         if(additionalProperties.containsKey(CodegenConstants.MODEL_NAME_SUFFIX)){
             this.setModelNameSuffix((String) additionalProperties.get(CodegenConstants.MODEL_NAME_SUFFIX));
+        }
+
+        if (additionalProperties.containsKey(CodegenConstants.APPEND_CONTEXT_PATH_TO_PACKAGE)) {
+            this.appendContextPathToPackage = Boolean.valueOf(additionalProperties.get(CodegenConstants.APPEND_CONTEXT_PATH_TO_PACKAGE).toString());
+        }
+
+        if (additionalProperties.containsKey(CodegenConstants.CONTEXT_PATH)) {
+            this.contextPath = additionalProperties.get(CodegenConstants.CONTEXT_PATH).toString();
         }
 
     }
@@ -192,7 +203,7 @@ public class DefaultCodegen {
 
     /**
      * post process enum defined in model's properties
-     * 
+     *
      * @param objs Map of models
      * @return maps of models with better enum support
      */
@@ -240,7 +251,7 @@ public class DefaultCodegen {
 
     /**
      * Returns the common prefix of variables for enum naming
-     * 
+     *
      * @param vars List of variable names
      * @return the common prefix for naming
      */
@@ -256,10 +267,10 @@ public class DefaultCodegen {
             return "";
         }
     }
-    
+
     /**
      * Return the enum default value in the language specified format
-     * 
+     *
      * @param value enum variable name
      * @param datatype data type
      * @return the default value for the enum
@@ -271,7 +282,7 @@ public class DefaultCodegen {
     /**
      * Return the enum value in the language specified format
      * e.g. status becomes "status"
-     * 
+     *
      * @param value enum variable name
      * @param datatype data type
      * @return the sanitized value for enum
@@ -283,10 +294,10 @@ public class DefaultCodegen {
             return "\"" + escapeText(value) + "\"";
         }
     }
-    
+
     /**
      * Return the sanitized variable name for enum
-     * 
+     *
      * @param value enum variable name
      * @param datatype data type
      * @return the sanitized variable name for enum
@@ -331,7 +342,7 @@ public class DefaultCodegen {
     @SuppressWarnings("unused")
     public void processSwagger(Swagger swagger) {
     }
-    
+
     // override with any special handling of the JMustache compiler
     @SuppressWarnings("unused")
     public Compiler processCompiler(Compiler compiler) {
@@ -369,7 +380,7 @@ public class DefaultCodegen {
     }
 
     /**
-     * Escape single and/or double quote to avoid code injection 
+     * Escape single and/or double quote to avoid code injection
      * @param input String to be cleaned up
      * @return string with quotation mark removed or escaped
      */
@@ -403,15 +414,15 @@ public class DefaultCodegen {
     }
 
     public String testPackage() {
-        return testPackage;
+        return testPackage + (appendContextPathToPackage ? contextPath.replace('/','.') : "");
     }
 
     public String modelPackage() {
-        return modelPackage;
+        return modelPackage + (appendContextPathToPackage ? contextPath.replace('/','.') : "");
     }
 
     public String apiPackage() {
-        return apiPackage;
+        return apiPackage + (appendContextPathToPackage ? contextPath.replace('/','.') : "");
     }
 
     public String fileSuffix() {
@@ -463,7 +474,7 @@ public class DefaultCodegen {
     }
 
     public String apiFileFolder() {
-        return outputFolder + "/" + apiPackage().replace('.', '/');
+        return outputFolder + "/" + apiPackage().replace('.', '/') + (appendContextPathToPackage ? "" : "");
     }
 
     public String modelFileFolder() {
@@ -567,8 +578,8 @@ public class DefaultCodegen {
     }
 
     /**
-     * Return the file name of the Api Documentation 
-     * 
+     * Return the file name of the Api Documentation
+     *
      * @param name the file name of the Api
      * @return the file name of the Api
      */
@@ -618,14 +629,14 @@ public class DefaultCodegen {
 
     /**
      * Return the capitalized file name of the model documentation
-     * 
+     *
      * @param name the model name
      * @return the file name of the model
      */
     public String toModelDocFilename(String name) {
         return initialCaps(name);
     }
-    
+
     /**
      * Return the operation ID (method name)
      *
@@ -788,9 +799,9 @@ public class DefaultCodegen {
         importMapping.put("LocalDate", "org.joda.time.*");
         importMapping.put("LocalTime", "org.joda.time.*");
 
-        // we've used the .swagger-codegen-ignore approach as 
+        // we've used the .swagger-codegen-ignore approach as
         // suppportingFiles can be cleared by code generator that extends
-        // the default codegen, leaving the commented code below for 
+        // the default codegen, leaving the commented code below for
         // future reference
         //supportingFiles.add(new GlobalSupportingFile("LICENSE", "LICENSE"));
 
@@ -940,7 +951,7 @@ public class DefaultCodegen {
     }
 
     /**
-     * Return the example value of the parameter. 
+     * Return the example value of the parameter.
      *
      * @param p Swagger property object
      */
@@ -2802,7 +2813,7 @@ public class DefaultCodegen {
         final int totalCount = propertyList.size();
         for (int i = 0; i < totalCount; i++) {
             Map.Entry<String, Property> entry = propertyList.get(i);
-            
+
             final String key = entry.getKey();
             final Property prop = entry.getValue();
 
@@ -3015,7 +3026,7 @@ public class DefaultCodegen {
     /**
      * Set library template (sub-template).
      *
-     * @param library Library template 
+     * @param library Library template
      */
     public void setLibrary(String library) {
         if (library != null && !supportedLibraries.containsKey(library))
@@ -3035,7 +3046,7 @@ public class DefaultCodegen {
     /**
      * Set Git user ID.
      *
-     * @param gitUserId Git user ID 
+     * @param gitUserId Git user ID
      */
     public void setGitUserId(String gitUserId) {
         this.gitUserId = gitUserId;
@@ -3053,7 +3064,7 @@ public class DefaultCodegen {
     /**
      * Set Git repo ID.
      *
-     * @param gitRepoId Git repo ID 
+     * @param gitRepoId Git repo ID
      */
     public void setGitRepoId(String gitRepoId) {
         this.gitRepoId = gitRepoId;
@@ -3096,7 +3107,7 @@ public class DefaultCodegen {
     }
 
     /**
-     * HTTP user agent 
+     * HTTP user agent
      *
      * @return HTTP user agent
      */
@@ -3266,7 +3277,7 @@ public class DefaultCodegen {
 
     /**
      * Update codegen property's enum by adding "enumVars" (with name and value)
-     * 
+     *
      * @param var list of CodegenProperty
      */
     public void updateCodegenPropertyEnum(CodegenProperty var) {
@@ -3341,7 +3352,7 @@ public class DefaultCodegen {
      * reads propertyKey from additionalProperties, converts it to a boolean and
      * writes it back to additionalProperties to be usable as a boolean in
      * mustache files.
-     * 
+     *
      * @param propertyKey
      * @return property value as boolean
      */

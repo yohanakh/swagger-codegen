@@ -133,4 +133,10 @@ public class CodegenConstants {
     public static final String GENERATE_PROPERTY_CHANGED = "generatePropertyChanged";
     public static final String GENERATE_PROPERTY_CHANGED_DESC = "Specifies that models support raising property changed events.";
 
+    public static final String APPEND_CONTEXT_PATH_TO_PACKAGE = "appendContextPathToPackage";
+    public static final String APPEND_CONTEXT_PATH_TO_PACKAGE_DESC = "Whether to append the context path to the package or noe";
+
+    public static final String CONTEXT_PATH = "contextPath";
+    public static final String CONTEXT_PATH_DESC = "The context path";
+
 }
