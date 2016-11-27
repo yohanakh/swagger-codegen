@@ -77,22 +77,23 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
 
   @Override
   public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }{{#hasVars}}
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    {{#parent}}if (!super.equals(o)) return false;{{/parent}}
+    {{#hasVars}}
     {{classname}} {{classVarName}} = ({{classname}}) o;
-    return {{#vars}}Objects.equals(this.{{name}}, {{classVarName}}.{{name}}){{#hasMore}} &&
-        {{/hasMore}}{{/vars}}{{#parent}} &&
-        super.equals(o){{/parent}};{{/hasVars}}{{^hasVars}}
+    return {{#vars}}!(this.{{name}} != null ? !this.{{name}}.equals({{classVarName}}.{{name}}) :  {{classVarName}}.{{name}} != null){{#hasMore}} &&
+        {{/hasMore}}{{/vars}};{{/hasVars}}{{^hasVars}}
     return true;{{/hasVars}}
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash({{#vars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/vars}}{{#parent}}{{#hasVars}}, {{/hasVars}}super.hashCode(){{/parent}});
+    {{#parent}}int result = super.hashCode();{{/parent}}{{^parent}}int result = 0;{{/parent}}
+    {{#vars}}
+    result = 31 * result + ({{name}} != null ? {{name}}.hashCode() : 0);
+    {{/vars}}
+    return result;
   }
 
   @Override
